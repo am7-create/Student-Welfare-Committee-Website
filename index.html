@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Welfare Committee | A+ Interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== GLOBAL STYLES ===== */
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
+body {background:#f4f4f9; color:#fff; overflow-x:hidden; scroll-behavior:smooth;}
+nav {position:fixed; width:100%; top:0; left:0; background:rgba(0,0,0,0.6); display:flex; justify-content:space-between; align-items:center; padding:1rem 3rem; z-index:1000;}
+nav h2 {color:#ff6b6b; font-size:1.8rem; font-weight:700;}
+nav div a, nav div button {color:#fff; margin-left:1.5rem; text-decoration:none; font-weight:500; transition:0.3s;}
+nav div a:hover, nav div button:hover {color:#ff6b6b; cursor:pointer;}
+nav div button {padding:0.5rem 1rem; border:1px solid #ff6b6b; background:transparent; border-radius:5px;}
+
+/* HERO SECTION */
+.hero {position:relative; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+.hero video {position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; filter:brightness(0.5);}
+.hero-content {text-align:center; max-width:800px;}
+.hero-content h1 {font-size:3rem; font-weight:700; color:#fff; margin-bottom:1rem;}
+.hero-content h1 #typed {color:#ff6b6b;}
+.hero-content p {font-size:1.2rem; margin-bottom:2rem;}
+.hero-btn {background:#ff6b6b; padding:0.8rem 2rem; border:none; border-radius:50px; font-size:1rem; cursor:pointer; transition:0.3s;}
+.hero-btn:hover {background:#ff4757;}
+
+/* COUNTDOWN */
+.countdown-container {margin-top:2rem;}
+.countdown {display:flex; justify-content:center; gap:1rem; font-weight:600;}
+.time-box {background: rgba(255,255,255,0.2); padding:0.8rem 1.2rem; border-radius:10px; font-size:1.2rem;}
+.progress-bar {width:80%; height:10px; background:rgba(255,255,255,0.2); margin:1rem auto 0; border-radius:10px; overflow:hidden;}
+#progress {height:100%; background:#ff6b6b; width:0; transition:0.5s;}
+
+/* SECTIONS */
+section {padding:6rem 3rem 3rem; text-align:center; background:#1e1e2f;}
+.section-title {font-size:2rem; margin-bottom:3rem; color:#ff6b6b; font-weight:600;}
+.cards {display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;}
+.card {background: rgba(255,255,255,0.1); padding:2rem 1.5rem; border-radius:20px; width:250px; cursor:pointer; transition:all 0.3s ease; opacity:0; transform:translateY(30px);}
+.card img {width:50px; margin-bottom:1rem;}
+.card h3 {margin-bottom:1rem;}
+.card p {font-size:0.95rem; line-height:1.4;}
+.card:hover {transform:translateY(-10px); background:rgba(255,107,107,0.3);}
+.card.in-view {opacity:1; transform:translateY(0); transition:all 0.6s ease-in-out;}
+
+/* HIDDEN SECTION */
+.hidden-section {display:none; opacity:0; transition:all 0.6s ease-in-out;}
+.hidden-section.active {display:block; opacity:1;}
+
+/* MODALS */
+.modal {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:2000;}
+.modal-box {background:#2e2e3f; padding:2rem; border-radius:15px; max-width:400px; text-align:center;}
+.modal-box h3 {margin-bottom:1rem; color:#ff6b6b;}
+.modal-box p {font-size:1rem; margin-bottom:1.5rem;}
+.modal-box .close {background:#ff6b6b; padding:0.5rem 1.5rem; border:none; border-radius:50px; color:#fff; cursor:pointer; transition:0.3s;}
+.modal-box .close:hover {background:#ff4757;}
+
+/* LOGIN INPUT */
+#login input {width:80%; padding:0.7rem; margin-bottom:1rem; border-radius:10px; border:none;}
+
+/* MEDIA QUERIES */
+@media (max-width:768px){.cards{flex-direction:column; gap:1.5rem;} nav{padding:1rem 2rem;} .hero-content h1{font-size:2rem;} .hero-content p{font-size:1rem;}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <h2>SWC</h2>
+  <div>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <button onclick="openLogin()">Login</button>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <video autoplay muted loop id="heroVideo">
+    <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+  </video>
+  <div class="hero-content">
+    <h1>Student Welfare <span id="typed"></span></h1>
+    <p>Support • Safety • Success</p>
+    <button class="hero-btn" onclick="showAdditionalContent()">Get Support</button>
+    <div class="countdown-container">
+      <div class="countdown" id="countdown"></div>
+      <div class="progress-bar"><div id="progress"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES SECTION -->
+<section id="services">
+  <h2 class="section-title">Our Focus Areas</h2>
+  <div class="cards">
+    <div class="card" onclick="openPopup('Academic Care','Mentoring and learning assistance.')">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/book.png"/>
+      <h3>Academic Care</h3>
+    </div>
+    <div class="card" onclick="openPopup('Mental Well-Being','Confidential emotional support.')">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/heart.png"/>
+      <h3>Mental Well-Being</h3>
+    </div>
+    <div class="card" onclick="openPopup('Grievance Redressal','Transparent issue resolution.')">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/complaint.png"/>
+      <h3>Grievance Redressal</h3>
+    </div>
+  </div>
+</section>
+
+<!-- ADDITIONAL CONTENT AFTER GET STARTED -->
+<section id="additional-content" class="hidden-section">
+  <h2 class="section-title">How We Support You</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Step 1: Academic Guidance</h3>
+      <p>Get mentoring and learning assistance tailored to your needs.</p>
+    </div>
+    <div class="card">
+      <h3>Step 2: Mental Well-Being</h3>
+      <p>Access confidential emotional support and counseling.</p>
+    </div>
+    <div class="card">
+      <h3>Step 3: Grievance Redressal</h3>
+      <p>Submit issues and track transparent resolution.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about">
+  <h2 class="section-title">About Student Welfare Committee</h2>
+  <p style="color:#fff; max-width:600px; margin:0 auto;">
+    The Student Welfare Committee (SWC) supports students in academics, mental well-being,
+    and grievance redressal. Our mission is to create a safe and supportive environment
+    for all students to thrive.
+  </p>
+</section>
+
+<!-- POPUP MODAL -->
+<div class="modal" id="popup">
+  <div class="modal-box">
+    <h3 id="modal-title">Title</h3>
+    <p id="modal-text">Details here...</p>
+    <button class="close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="login">
+  <div class="modal-box">
+    <h3>Login</h3>
+    <input type="text" placeholder="Phone or Email" id="userInput">
+    <input type="password" placeholder="Password" id="userPass">
+    <button class="hero-btn" onclick="loginSubmit()">Login</button>
+    <button class="close" onclick="closeLogin()">Close</button>
+  </div>
+</div>
+
+<script>
+// Typing effect
+const text = "& Support Committee"; 
+let i=0;
+function type(){
+  if(i<text.length){
+    document.getElementById('typed').innerHTML+=text.charAt(i); i++;
+    setTimeout(type,120);
+  } else {
+    setTimeout(()=>{ document.getElementById('typed').innerHTML=''; i=0; type(); }, 2000);
+  }
+}
+type();
+
+// Countdown 24h & progress bar
+const totalTime = 86400000; //24 hours in ms
+const end = new Date().getTime()+totalTime;
+setInterval(()=>{
+  const now=new Date().getTime();
+  const d=end-now;
+  const h=Math.floor(d/(1000*60*60));
+  const m=Math.floor((d%(1000*60*60))/(1000*60));
+  const s=Math.floor((d%(1000*60))/1000);
+  document.getElementById('countdown').innerHTML=
+    `<div class='time-box'>${h}h</div><div class='time-box'>${m}m</div><div class='time-box'>${s}s</div>`;
+  document.getElementById('progress').style.width=`${((totalTime-d)/totalTime)*100}%`;
+},1000);
+
+// Show additional content after Get Started
+function showAdditionalContent() {
+  const section = document.getElementById('additional-content');
+  section.classList.add('active');
+  section.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Open/Close Modals
+function openModal(){document.getElementById('popup').style.display='flex';}
+function closeModal(){document.getElementById('popup').style.display='none';}
+function openLogin(){document.getElementById('login').style.display='flex';}
+function closeLogin(){document.getElementById('login').style.display='none';}
+
+// Open popup on card click
+function openPopup(title,text){
+  document.getElementById('modal-title').innerText=title;
+  document.getElementById('modal-text').innerText=text;
+  openModal();
+}
+
+// Scroll reveal
+window.addEventListener('scroll',()=>{
+  document.querySelectorAll('.card').forEach(el=>{
+    const top=el.getBoundingClientRect().top;
+    if(top<window.innerHeight-100) el.classList.add('in-view');
+  });
+});
+
+// Login functionality
+function loginSubmit() {
+  const user = document.getElementById('userInput').value;
+  const pass = document.getElementById('userPass').value;
+
+  if (
+    (user === "7001784395" && pass === "23052940@kiit.ac.in") ||
+    (user === "8535091906" && pass === "2305718@kiit.ac.in")
+  ) {
+    alert("Login successful!");
+    closeLogin();
+  } else {
+    alert("Invalid credentials. Please try again.");
+  }
+}
+</script>
+</body>
+</html>
+</html>
